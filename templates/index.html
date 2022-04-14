@@ -9,7 +9,8 @@
 </head>
 <body>
     <section class="container">
-        <h1>Мое предложение: {{context.planet_name}}</h1>
+        <h1>Результаты отбора</h1>
+        <h2>Претендента на участие в миссии {{context.nickname}}</h2>
         <div class="facts">
             {% if context.facts %}
                 {% for fact in context.facts %}
