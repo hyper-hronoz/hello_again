@@ -9,11 +9,21 @@
 <body>
     <header style="display: flex; align-items: center; justify-content: space-between;">
         <h1>Миссия колонизация марса</h1>
-        <span>Mars one</span>
+        <span >Mars one</span>
     </header>
     <section>
-        <h4>И на Марсе будут яблони цвести!</h4>
-        <img src="{{image_source}}" alt="here must be image">
+        <h4 style="color: #ccc">И на марсе будут яблони цвести</h4>
+        {% if context.list_type %}
+            <{{context.list_type}}>
+                {% for profession in context.professions %}
+                        <li>{{profession}}</li>
+                {% endfor %}
+            </{{context.list_type}}>
+        {% endif %}
+
+        <span>
+            {{context.error}}
+        </span>
     </section>
 </body>
 </html>

@@ -2,11 +2,18 @@ from flask import Flask, escape, request, render_template
 
 app = Flask(__name__)
 
-@app.route("/index/<title>", methods=["GET"])
-def hello(title):
-    image_source = "/static/1.jpg"
+@app.route("/list_prof", methods=["GET"], defaults={"list_type": ""})
+@app.route("/list_prof/<list_type>", methods=["GET"])
+def hello(list_type):
+    context = {}
 
-    if ("инженер" in title or "строитель" in title):
-        image_source = "/static/2.png"
+    context["error"] = ""
 
-    return render_template("index.html", title=title, image_source=image_source)
+    if not list_type:
+        context["error"] = "Да я тебя на марс отправлю! Вписал параметр быстро!"
+    else:
+        context["professions"] = ["инженер-исследователь", "пилот", "строитель", "экзобиолог", "не могли сразу готовый массив дать?"]
+
+    context["list_type"] = list_type
+
+    return render_template("index.html", context=context)
