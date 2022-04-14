@@ -8,23 +8,40 @@
     <title>Варианты выбора</title>
 </head>
 <body>
-    <section class="container">
-        <h1>Результаты отбора</h1>
-        <h2>Претендента на участие в миссии {{context.nickname}}</h2>
-        <div class="facts">
-            {% if context.facts %}
-                {% for fact in context.facts %}
-                    <h6 class="p-5">{{fact}}</h6>
-                {% endfor %}
-            {% endif %}
-        </div>
+    <section class="container-sm" style="max-width: 600px;">
+        <h1>Загрузка фотографии</h1>
+        <h2>Для участия в миссии</h2>
+        <form method="POST" action="/upload" id="form" enctype = "multipart/form-data">
+            <div class="form-group">
+                <label for="formFileDisabled" class="form-label">Disabled file input example</label>
+                <input class="form-control" type="file" id="form_file" name="file"/>
+            </div>
+            <img src="{{link}}" alt="" class="w-100 mt-2" id="image_container" style="background-size: contain; background-position: center;">
+            <button type="submit" class="btn btn-primary mt-2">Submit</button>
+          </form>
     </section>
+
     <script>
-        const factsContainer = document.querySelector(".facts")
-        for (child of factsContainer.children) {
-            const randomColor = Math.floor(Math.random()*16777215).toString(16);
-            child.style.background = "#" + randomColor
-        }
+        const image_input = document.querySelector("#form_file")
+        const image_container = document.querySelector("#image_container")
+        const form_width = document.querySelector("#form").scrollWidth
+
+        image_input.addEventListener('change', function() {
+
+            const reader = new FileReader()
+     
+            reader.addEventListener('load', function() {
+                const image = new Image()
+                image.src = reader.result
+                image_container.src = image.src
+                image.addEventListener("load", () => {
+                    image_container.style.height = image.height * (form_width / image.width) + "px"
+                    image_container.style.display = "block" 
+                });
+            })
+
+            reader.readAsDataURL(this.files[0])
+        });
     </script>
 </body>
 </html>

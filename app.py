@@ -1,15 +1,25 @@
-from email.policy import default
-from multiprocessing import context
-from flask import Flask, render_template
+import imp
+import os
+from flask import Flask, render_template, request, session
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = "templates"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///main.db'
+app.config['UPLOAD_FOLDER'] = "static"
+app.secret_key = "ЕХАЛГРЕКА"
+db = SQLAlchemy(app)
 
+@app.route("/load_photo")
+def index():
+    return render_template("index.html", link=session.get("path", ""))
 
-@app.route("/choice/<nickname>/<int:level>/<float:rating>")
-def choice(nickname, level, rating):
-    context = {}
-
-    context["nickname"] = nickname
-    context["facts"] = [f"Проздравляем! Ваш рейтинг после {level} этапа отбора", f"составляет {rating}", f"Желаем удачи!"]
-
-    return render_template("index.html", context=context)
+@app.route('/upload', methods = ["POST"])
+def upload_file():
+    file = request.files['file']
+    file_name = secure_filename(file.filename)
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_name)
+    file.save(file_path)
+    session["path"] = "/static/" + file_name
+    return 'file uploaded successfully'
