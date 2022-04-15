@@ -11,15 +11,6 @@ app.config['UPLOAD_FOLDER'] = "static"
 app.secret_key = "ЕХАЛГРЕКА"
 db = SQLAlchemy(app)
 
-@app.route("/load_photo")
+@app.route("/carousel")
 def index():
-    return render_template("index.html", link=session.get("path", ""))
-
-@app.route('/upload', methods = ["POST"])
-def upload_file():
-    file = request.files['file']
-    file_name = secure_filename(file.filename)
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_name)
-    file.save(file_path)
-    session["path"] = "/static/" + file_name
-    return 'file uploaded successfully'
+    return render_template("index.html")
