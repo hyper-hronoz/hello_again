@@ -22,4 +22,4 @@ def upload_file():
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_name)
     file.save(file_path)
     session["path"] = "/static/" + file_name
-    return 'file uploaded successfully'
+    return render_template("index.html", link=session.get("path", ""))
